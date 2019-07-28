@@ -11,6 +11,7 @@ class GridAlign < Propane::App
 
   def setup
     sketch_title 'Grid Align'
+    generate_decisions
   end
 
   def draw
@@ -22,7 +23,11 @@ class GridAlign < Propane::App
         posX = width / TILE_COUNT * x
         posY = height / TILE_COUNT * y
 
-        if [true, false].sample
+        require 'rubygems'
+        require 'ruby-debug'
+        debugger
+
+        if @decisions[x][y]
           strokeWeight(mouseX / 20)
           line(posX, posY, posX + width / TILE_COUNT, posY + height / TILE_COUNT)
         else
@@ -33,14 +38,17 @@ class GridAlign < Propane::App
     end
   end
 
-  def generate_decision
-    @decision = Array.new(TILE_COUNT)
-    @decision.map do |y|
+  def generate_decisions
+    @decisions = Array.new(TILE_COUNT).map do |y|
       Array.new(TILE_COUNT).map do |x|
         [true, false].sample
       end
     end
   end
+
+  def mousePressed
+    generate_decisions
+  end
 end
 
-# GridAlign.new
+GridAlign.new
