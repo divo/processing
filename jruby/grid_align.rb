@@ -6,7 +6,7 @@ class GridAlign < Propane::App
   TILE_COUNT = 20
 
   def settings
-    size 400, 400
+    size 1000, 1000
   end
 
   def setup
@@ -14,6 +14,9 @@ class GridAlign < Propane::App
   end
 
   def draw
+    background(255, 255, 255)
+
+    strokeCap(ROUND)
     for y in (0..TILE_COUNT)
       for x in (0..TILE_COUNT)
         posX = width / TILE_COUNT * x
@@ -29,6 +32,15 @@ class GridAlign < Propane::App
       end
     end
   end
+
+  def generate_decision
+    @decision = Array.new(TILE_COUNT)
+    @decision.map do |y|
+      Array.new(TILE_COUNT).map do |x|
+        [true, false].sample
+      end
+    end
+  end
 end
 
-GridAlign.new
+# GridAlign.new
