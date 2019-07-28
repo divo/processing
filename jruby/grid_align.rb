@@ -12,12 +12,13 @@ class GridAlign < Propane::App
   def setup
     sketch_title 'Grid Align'
     generate_decisions
+    @strokeCap = ROUND
   end
 
   def draw
     background(255, 255, 255)
 
-    strokeCap(ROUND)
+    strokeCap(@strokeCap)
     for y in (0...TILE_COUNT)
       for x in (0...TILE_COUNT)
         posX = width / TILE_COUNT * x
@@ -44,6 +45,12 @@ class GridAlign < Propane::App
 
   def mousePressed
     generate_decisions
+  end
+
+  def keyReleased
+    @strokeCap = ROUND if key == '1'
+    @strokeCap = SQUARE if key == '2'
+    @strokeCap = PROJECT if key == '3'
   end
 end
 
