@@ -18,14 +18,10 @@ class GridAlign < Propane::App
     background(255, 255, 255)
 
     strokeCap(ROUND)
-    for y in (0..TILE_COUNT)
-      for x in (0..TILE_COUNT)
+    for y in (0...TILE_COUNT)
+      for x in (0...TILE_COUNT)
         posX = width / TILE_COUNT * x
         posY = height / TILE_COUNT * y
-
-        require 'rubygems'
-        require 'ruby-debug'
-        debugger
 
         if @decisions[x][y]
           strokeWeight(mouseX / 20)
