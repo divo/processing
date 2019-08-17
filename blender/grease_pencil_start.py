@@ -1,4 +1,5 @@
 import bpy
+import math
 
 def get_grease_pencil(gpencil_obj_name='GPencil') -> bpy.types.GreasePencil:
     """
@@ -48,6 +49,9 @@ def init_grease_pencil(gpencil_obj_name='GPencil', gpencil_layer_name='GP_Layer'
     gpencil_layer = get_grease_pencil_layer(gpencil, gpencil_layer_name, clear_layer=clear_layer)
     return gpencil_layer
 
+gp_layer = init_grease_pencil()
+gp_frame = gp_layer.frames.new(0)
+
 def draw_line(gp_frame, p0: tuple, p1: tuple):
     # Init new stroke
     gp_stroke = gp_frame.strokes.new()
@@ -59,6 +63,21 @@ def draw_line(gp_frame, p0: tuple, p1: tuple):
     gp_stroke.points[1].co = p1
     return gp_stroke
 
-gp_layer = init_grease_pencil()
-gp_frame = gp_layer.frames.new(0)
-draw_line(gp_frame, (0, 0, 0), (1, 1, 0))
+def draw_circle(gp_frame, center: tuple, radius: float, segments: int):
+    # Init new stroke
+    gp_stroke = gp_frame.strokes.new()
+    gp_stroke.display_mode = '3DSPACE'  # allows for editing
+    gp_stroke.draw_cyclic = True        # closes the stroke
+
+    # Define stroke geometry
+    angle = 2*math.pi/segments  # angle in radians
+    gp_stroke.points.add(count=segments)
+    for i in range(segments):
+        x = center[0] + radius*math.cos(angle*i)
+        y = center[1] + radius*math.sin(angle*i)
+        z = center[2]
+        gp_stroke.points[i].co = (x, y, z)
+
+    return gp_stroke
+
+draw_circle(gp_frame, (0, 0, 0), 1, 100)
