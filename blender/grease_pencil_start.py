@@ -8,7 +8,7 @@ def get_grease_pencil(gpencil_obj_name='GPencil') -> bpy.types.GreasePencil:
 
     # If not present already, create grease pencil object
     if gpencil_obj_name not in bpy.context.scene.objects:
-        bpy.ops.object.gpencil_add(view_align=false, location=(0, 0, 0), type='EMPTY')
+        bpy.ops.object.gpencil_add(align='WORLD', location=(0, 0, 0), type='EMPTY')
         # rename grease pencil
         bpy.context.scene.objects[-1].name = gpencil_obj_name
 
