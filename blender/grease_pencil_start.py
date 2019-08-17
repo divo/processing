@@ -48,5 +48,17 @@ def init_grease_pencil(gpencil_obj_name='GPencil', gpencil_layer_name='GP_Layer'
     gpencil_layer = get_grease_pencil_layer(gpencil, gpencil_layer_name, clear_layer=clear_layer)
     return gpencil_layer
 
+def draw_line(gp_frame, p0: tuple, p1: tuple):
+    # Init new stroke
+    gp_stroke = gp_frame.strokes.new()
+    gp_stroke.display_mode = '3DSPACE'  # allows for editing
+
+    # Define stroke geometry
+    gp_stroke.points.add(count=2)
+    gp_stroke.points[0].co = p0
+    gp_stroke.points[1].co = p1
+    return gp_stroke
+
 gp_layer = init_grease_pencil()
 gp_frame = gp_layer.frames.new(0)
+draw_line(gp_frame, (0, 0, 0), (1, 1, 0))
