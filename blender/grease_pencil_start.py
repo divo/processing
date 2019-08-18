@@ -1,5 +1,7 @@
 import bpy
 import math
+import numpy as np
+from math import cos, sin
 
 def get_grease_pencil(gpencil_obj_name='GPencil') -> bpy.types.GreasePencil:
     """
@@ -80,4 +82,30 @@ def draw_circle(gp_frame, center: tuple, radius: float, segments: int):
 
     return gp_stroke
 
-draw_circle(gp_frame, (0, 0, 0), 1, 100)
+def rotate_stroke(stroke, angle, axis='z'):
+    # Define rotation matrix based on axis
+    if axis.lower() == 'x':
+        transform_matrix = np.array([[1, 0, 0],
+                                     [0, cos(angle), -sin(angle)],
+                                     [0, sin(angle), cos(angle)]])
+    elif axis.lower() == 'y':
+        transform_matrix = np.array([[cos(angle), 0, -sin(angle)],
+                                     [0, 1, 0],
+                                     [sin(angle), 0, cos(angle)]])
+    # default on z
+    else:
+        transform_matrix = np.array([[cos(angle), -sin(angle), 0],
+                                     [sin(angle), cos(angle), 0],
+                                     [0, 0, 1]])
+
+    # Apply rotation matrix to each point
+    for i, p in enumerate(stroke.points):
+        p.co = transform_matrix @ np.array(p.co).reshape(3, 1)
+        
+def draw_sphere(gp_frame, radius: int, circles: int):
+    angle = math.pi / circles
+    for i in range(circles):
+        circle = draw_circle(gp_frame, (0, 0, 0), radius, 32)
+        rotate_stroke(circle, angle*i, 'x')
+
+draw_sphere(gp_frame, 1, 10)
