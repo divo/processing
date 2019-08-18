@@ -1,3 +1,5 @@
+# https://towardsdatascience.com/blender-2-8-grease-pencil-scripting-and-generative-art-cbbfd3967590
+
 import bpy
 import math
 import numpy as np
@@ -102,10 +104,13 @@ def rotate_stroke(stroke, angle, axis='z'):
     for i, p in enumerate(stroke.points):
         p.co = transform_matrix @ np.array(p.co).reshape(3, 1)
         
-def draw_sphere(gp_frame, radius: int, circles: int):
+def draw_sphere(gp_frame, radius: int, circles: int, rot_axis='x'):
     angle = math.pi / circles
     for i in range(circles):
         circle = draw_circle(gp_frame, (0, 0, 0), radius, 32)
-        rotate_stroke(circle, angle*i, 'x')
+        rotate_stroke(circle, angle*i, rot_axis)
 
 draw_sphere(gp_frame, 1, 10)
+draw_sphere(gp_frame, 1.2, 10, 'y')
+draw_sphere(gp_frame, 1.4, 10)
+draw_sphere(gp_frame, 1.5, 10, 'y')
