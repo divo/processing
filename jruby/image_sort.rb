@@ -26,7 +26,7 @@ class TemplateSketch < Propane::App
         px = x * rect_size
         py = y * rect_size
         # Sort entire image, then later do sort row by row
-        colors.last << @img.get(px, py)
+        colors.last << @img.get(py, px)
       end
     end
 
