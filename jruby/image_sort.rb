@@ -10,6 +10,7 @@ class TemplateSketch < Propane::App
   def setup
     sketch_title 'Image sort'
     @img = load_image(data_path('image.jpg'))
+    @sort = -> (colors) { colors.flatten }
   end
 
   def draw
@@ -29,7 +30,7 @@ class TemplateSketch < Propane::App
       end
     end
 
-    colors.each(&:sort!).flatten!
+    colors = @sort.call(colors)
 
     # draw
     i = 0
@@ -39,6 +40,15 @@ class TemplateSketch < Propane::App
         rect(x * rect_size, y * rect_size, rect_size, rect_size)
         i += 1
       end
+    end
+  end
+
+  def key_pressed
+    case key
+    when 'a' # No sort
+      @sort = -> (colors) { colors.flatten }
+    when 's' # Basic sort
+      @sort = -> (colors) { colors.each(&:sort!).flatten! }
     end
   end
 end
