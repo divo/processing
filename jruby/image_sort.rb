@@ -4,17 +4,17 @@ require 'propane'
 class TemplateSketch < Propane::App
 
   def settings
-    size(800, 600)
+    @img = load_image(data_path('image.jpg'))
+    size(@img.width, @img.height)
   end
 
   def setup
     sketch_title 'Image sort'
-    @img = load_image(data_path('image.jpg'))
     @sort = -> (colors) { colors.flatten }
   end
 
   def draw
-    tile_count = width / [mouseX, 2].max
+    tile_count = width / [mouseX * 2, 2].max
     rect_size = width / tile_count # Do I need to make this a float explicitly
 
     colors = []
