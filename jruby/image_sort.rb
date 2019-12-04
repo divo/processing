@@ -13,23 +13,23 @@ class TemplateSketch < Propane::App
   end
 
   def draw
-    tile_count = width / [mouseX, 1].max
-    #tile_count = width / [mouseX, 5].max
+    tile_count = width / [mouseX, 2].max
     rect_size = width / tile_count # Do I need to make this a float explicitly
 
     colors = []
 
     # scan
     for y in (0..tile_count)
+      colors << []
       for x in (0..tile_count)
         px = x * rect_size
         py = y * rect_size
         # Sort entire image, then later do sort row by row
-        colors << @img.get(px, py)
+        colors.last << @img.get(px, py)
       end
     end
 
-    colors.sort!
+    colors.each(&:sort!).flatten!
 
     # draw
     i = 0
