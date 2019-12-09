@@ -5,7 +5,8 @@ require 'propane'
 class DumbAgents < Propane::App
 
   def settings
-    size(2000, 1500)
+    #size(2000, 1500)
+    size(800, 800)
   end
 
   def setup
@@ -28,7 +29,8 @@ class DumbAgents < Propane::App
 
   def draw
     for x in (0..mouseX)
-      direction = rand(8)
+      #direction = rand(8)
+      direction = rand(1..5)
       step(direction)
       wrap
       fill(0, 40)
