@@ -8,16 +8,29 @@ class Blueprint < Propane::App
   attr_accessor :text # TODO: Option to save this
   attr_accessor :font
 
+  # TODO: Put this in a hash or something, sake
+  attr_accessor :shape_space, :shape_space2, :shape_period, :shape_comma
+  attr_accessor :shape_questionmark, :shape_exclamationmark, :shape_return;
+
   def settings
     size(800, 600)
     centerX, @centerY = width / 2, height / 2 # TODO: Mouse clicked
     zoom = 1 # TODO: Scaling
+    @text = ''
   end
 
   def setup
     sketch_title 'Blueprint'
     # font = load_font(data_path("miso-bold.ttf"))
     @font = create_font('Helvetica', 25)
+
+    @shape_space = load_shape(data_path('space.svg'))
+    @shape_space2 = load_shape(data_path('space2.svg'))
+    @shape_period = load_shape(data_path('period.svg'))
+    @shape_comma = load_shape(data_path('comma.svg'))
+    @shape_questionmark = load_shape(data_path('questionmark.svg'))
+    @shape_exclamationmark = load_shape(data_path('exclamationmark.svg'))
+    @shape_return = load_shape(data_path('return.svg'))
   end
 
   def draw
