@@ -3,15 +3,27 @@ require 'propane'
 
 class Blueprint < Propane::App
 
-  # TOOD: WTF exaclty do these accessors do
+  # TODO: WTF exaclty do these accessors do
   attr_accessor :centerX, :centerY
   attr_accessor :zoom
   attr_accessor :text # TODO: Option to save this
   attr_accessor :font
+  attr_accessor :shapes
 
-  # TODO: Put this in a hash or something, sake
-  attr_accessor :shape_space, :shape_space2, :shape_period, :shape_comma
-  attr_accessor :shape_questionmark, :shape_exclamationmark, :shape_return;
+  SHAPES = %i[
+    space
+    space2
+    period
+    comma
+    questionmark
+    exclamationmark
+    return
+    icon1
+    icon2
+    icon3
+    icon4
+    icon5
+  ]
 
   def settings
     size(800, 600)
@@ -22,16 +34,9 @@ class Blueprint < Propane::App
 
   def setup
     sketch_title 'Blueprint'
-    # font = load_font(data_path("miso-bold.ttf"))
     @font = create_font('Helvetica', 25)
-
-    @shape_space = load_shape(data_path('space.svg'))
-    @shape_space2 = load_shape(data_path('space2.svg'))
-    @shape_period = load_shape(data_path('period.svg'))
-    @shape_comma = load_shape(data_path('comma.svg'))
-    @shape_questionmark = load_shape(data_path('questionmark.svg'))
-    @shape_exclamationmark = load_shape(data_path('exclamationmark.svg'))
-    @shape_return = load_shape(data_path('return.svg'))
+    load_proc = ->(file) { load_shape(data_path(file)) }
+    @shapes = Shapes.new(SHAPES, load_proc)
   end
 
   def draw
@@ -44,7 +49,7 @@ class Blueprint < Propane::App
       char_width = text_width(char)
       case char
       when ' '
-        shape(shape_space, 0, 0)
+        shape(shapes[:space], 0, 0)
         translate(10.9, 0)
       end
     end
@@ -58,6 +63,19 @@ class Blueprint < Propane::App
 		else
 			@text += key
 		end
+  end
+end
+
+class Shapes
+  attr_accessor :data
+  def initialize(names, load_proc)
+    @data = names.each_with_object({}) do |name, result|
+      result[name] = load_proc.call("#{name}.svg")
+    end
+  end
+
+  def to_h
+    data
   end
 end
 
