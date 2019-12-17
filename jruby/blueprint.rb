@@ -25,6 +25,8 @@ class Blueprint < Propane::App
     icon5
   ]
 
+  # TODO: palette
+
   def settings
     size(800, 600)
     @centerX, @centerY = width / 2, height / 2 # TODO: Mouse clicked
@@ -41,6 +43,11 @@ class Blueprint < Propane::App
 
   def draw
     # TODO: scaling and translation are kinda key to this
+    background(255)
+    # smooth
+    no_stroke
+    text_align(LEFT)
+
     translate(centerX, centerY) # Move to mouse position
     #scale(zoom)
 
@@ -50,7 +57,24 @@ class Blueprint < Propane::App
       case char
       when ' '
         shape(shapes[:space], 0, 0)
-        translate(10.9, 0)
+        translate(1, 0)
+        rotate(PI/4)
+      when ','
+        shape(shapes[:comma], 0, 0)
+        translate(31.5, 13.5)
+        rotate(PI/4)
+      when '.'
+        shape(shapes[:period], 0, 0)
+        translate(56, -54)
+        rotate(-PI/2)
+      when '1' #TODO Some issue with ! and ?, looks like a Unicode vs ASCII thing
+        shape(shapes[:exclamationmark], 0, 0)
+        translate(42, -17.4)
+        rotate(-PI/4)
+      when '2'
+        shape(shapes[:questionmark], 0, 0)
+        translate(42, -18)
+        rotate(-PI/4)
       end
     end
   end
@@ -59,10 +83,12 @@ class Blueprint < Propane::App
   def key_pressed
 		case key
 		when BACKSPACE
-			@text = text.delete_suffix!(text.chars.last)
+      # TODO: Fix this please
+      @text = @text.chars[0..(@text.size - 1)].join
 		else
 			@text += key
 		end
+    puts @text
   end
 end
 
@@ -71,6 +97,7 @@ class Shapes
   def initialize(names, load_proc)
     @data = names.each_with_object({}) do |name, result|
       result[name] = load_proc.call("#{name}.svg")
+      #result[name].disable_style
     end
   end
 
@@ -80,3 +107,4 @@ class Shapes
 end
 
 Blueprint.new
+
