@@ -56,7 +56,7 @@ class Blueprint < Propane::App
   end
 
   # TODO: Maybe a command mode?
-  def keyPressed
+  def key_pressed
 		case key
 		when BACKSPACE
 			@text = text.delete_suffix!(text.chars.last)
