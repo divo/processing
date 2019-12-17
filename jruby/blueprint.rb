@@ -74,8 +74,8 @@ class Shapes
     end
   end
 
-  def to_h
-    data
+  def [](name)
+    data[name]
   end
 end
 
