@@ -5,6 +5,7 @@ class Blueprint < Propane::App
 
   # TODO: WTF exaclty do these accessors do
   attr_accessor :center_x, :center_y
+  attr_accessor :offset_x, :offset_y
   attr_accessor :zoom
   attr_accessor :text # TODO: Option to save this
   attr_accessor :font
@@ -49,11 +50,10 @@ class Blueprint < Propane::App
     no_stroke
     text_align(LEFT)
 
-#    if mouse_pressed
-#      puts "mouse pressed"
-#      @center_x = mouseX
-#      @center_y = mouseY
-#    end
+    if mouse_pressed?
+      @center_x = mouseX - offset_x
+      @center_y = mouseY - offset_y
+    end
 
     translate(center_x, center_y) # Move to mouse position
     #scale(zoom)
@@ -79,9 +79,8 @@ class Blueprint < Propane::App
   end
 
   def mouse_pressed
-    # TODO: This just moves the drawing around. I need to store these along with the string
-    @center_x = mouseX
-    @center_y = mouseY
+    @offset_x = mouseX - @center_x
+    @offset_y = mouseY - @center_y
   end
 
   def char_method
