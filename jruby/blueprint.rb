@@ -46,6 +46,7 @@ class Blueprint < Propane::App
   def draw
     # TODO: scaling and translation are kinda key to this
     background(255)
+    fill(0)
     # smooth
     no_stroke
     text_align(LEFT)
@@ -96,9 +97,9 @@ class Blueprint < Propane::App
   end
 
   def space
-    shape(shapes[:space], 0, 0)
-    translate(1, 0)
-    rotate(PI / 4)
+    letterWidth = 15 # TODO: Pass this
+    rect(0, -15, letterWidth + 1, 15);
+    translate(letterWidth, 0);
   end
 
   def comma
