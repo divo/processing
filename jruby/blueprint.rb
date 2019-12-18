@@ -11,18 +11,18 @@ class Blueprint < Propane::App
   attr_accessor :shapes
 
   SHAPES = %i[
-    space
-    space2
-    period
-    comma
-    questionmark
-    exclamationmark
-    return
-    icon1
-    icon2
-    icon3
-    icon4
-    icon5
+  space
+  space2
+  period
+  comma
+  questionmark
+  exclamationmark
+  return
+  icon1
+  icon2
+  icon3
+  icon4
+  icon5
   ]
 
   # TODO: palette
@@ -54,41 +54,61 @@ class Blueprint < Propane::App
     text_font(@font)
     text.chars.each do |char|
       char_width = text_width(char)
-      case char
-      when ' '
-        shape(shapes[:space], 0, 0)
-        translate(1, 0)
-        rotate(PI/4)
-      when ','
-        shape(shapes[:comma], 0, 0)
-        translate(31.5, 13.5)
-        rotate(PI/4)
-      when '.'
-        shape(shapes[:period], 0, 0)
-        translate(56, -54)
-        rotate(-PI/2)
-      when '1' #TODO Some issue with ! and ?, looks like a Unicode vs ASCII thing
-        shape(shapes[:exclamationmark], 0, 0)
-        translate(42, -17.4)
-        rotate(-PI/4)
-      when '2'
-        shape(shapes[:questionmark], 0, 0)
-        translate(42, -18)
-        rotate(-PI/4)
-      end
+      method = char_method[char]
+      send(method) if method
     end
   end
 
   # TODO: Maybe a command mode?
   def key_pressed
-		case key
-		when BACKSPACE
+    case key
+    when BACKSPACE
       # TODO: Fix this please
       @text = @text.chars[0..(@text.size - 1)].join
-		else
-			@text += key
-		end
+    else
+      @text += key
+    end
     puts @text
+  end
+
+  def char_method
+    {
+      ' ' => :space,
+      ',' => :comma,
+      '.' => :period,
+      '1' => :exclamationmark,
+      '2' => :questionmark
+    }
+  end
+
+  def space
+    shape(shapes[:space], 0, 0)
+    translate(1, 0)
+    rotate(PI / 4)
+  end
+
+  def comma
+    shape(shapes[:comma], 0, 0)
+    translate(31.5, 13.5)
+    rotate(PI / 4)
+  end
+
+  def period
+    shape(shapes[:period], 0, 0)
+    translate(56, -54)
+    rotate(-PI / 2)
+  end
+
+  def exclamationmark
+    shape(shapes[:exclamationmark], 0, 0)
+    translate(42, -17.4)
+    rotate(-PI/4)
+  end
+
+  def questionmark
+    shape(shapes[:questionmark], 0, 0)
+    translate(42, -18)
+    rotate(-PI/4)
   end
 end
 
