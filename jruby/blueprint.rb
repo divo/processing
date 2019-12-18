@@ -68,13 +68,13 @@ class Blueprint < Propane::App
 
   # TODO: Maybe a command mode?
   def key_pressed
-    case key
-    when BACKSPACE
-      # TODO: Fix this please
-      @text = @text.chars[0..(@text.size - 1)].join
+    case key.bytes
+    when [8] # backspace
+      @text.chop!
     else
       @text += key
     end
+    # TODO: More repl like
     puts @text
   end
 
