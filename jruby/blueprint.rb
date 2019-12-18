@@ -74,7 +74,9 @@ class Blueprint < Propane::App
     else
       @text += key
     end
-    # TODO: More repl like
+
+    # TODO: Legend / instructions
+    system "clear"
     puts @text
   end
 
