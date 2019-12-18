@@ -4,7 +4,7 @@ require 'propane'
 class Blueprint < Propane::App
 
   # TODO: WTF exaclty do these accessors do
-  attr_accessor :centerX, :centerY
+  attr_accessor :center_x, :center_y
   attr_accessor :zoom
   attr_accessor :text # TODO: Option to save this
   attr_accessor :font
@@ -29,7 +29,8 @@ class Blueprint < Propane::App
 
   def settings
     size(800, 600)
-    @centerX, @centerY = width / 2, height / 2 # TODO: Mouse clicked
+    @center_x, @center_y = width / 2, height / 2 # TODO: Mouse clicked
+    @offset_x, @offset_y = 0, 0
     zoom = 1 # TODO: Scaling
     @text = ''
   end
@@ -48,7 +49,13 @@ class Blueprint < Propane::App
     no_stroke
     text_align(LEFT)
 
-    translate(centerX, centerY) # Move to mouse position
+#    if mouse_pressed
+#      puts "mouse pressed"
+#      @center_x = mouseX
+#      @center_y = mouseY
+#    end
+
+    translate(center_x, center_y) # Move to mouse position
     #scale(zoom)
 
     text_font(@font)
@@ -69,6 +76,12 @@ class Blueprint < Propane::App
       @text += key
     end
     puts @text
+  end
+
+  def mouse_pressed
+    # TODO: This just moves the drawing around. I need to store these along with the string
+    @center_x = mouseX
+    @center_y = mouseY
   end
 
   def char_method
