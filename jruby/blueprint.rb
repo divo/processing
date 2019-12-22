@@ -1,5 +1,6 @@
 # P.3.1.2
 require 'propane'
+require 'ruby-debug'
 
 class Blueprint < Propane::App
 
@@ -7,7 +8,7 @@ class Blueprint < Propane::App
   attr_accessor :center_x, :center_y
   attr_accessor :offset_x, :offset_y
   attr_accessor :zoom
-  attr_accessor :text # TODO: Option to save this
+  attr_accessor :text_input # TODO: Option to save this
   attr_accessor :font
   attr_accessor :shapes
 
@@ -33,7 +34,7 @@ class Blueprint < Propane::App
     @center_x, @center_y = width / 2, height / 2 # TODO: Mouse clicked
     @offset_x, @offset_y = 0, 0
     zoom = 1 # TODO: Scaling
-    @text = ''
+    @text_input = ''
   end
 
   def setup
@@ -49,7 +50,7 @@ class Blueprint < Propane::App
     fill(0)
     # smooth
     no_stroke
-    text_align(LEFT)
+    text_align(CENTER, CENTER)
 
     if mouse_pressed?
       @center_x = mouseX - offset_x
@@ -60,13 +61,13 @@ class Blueprint < Propane::App
     #scale(zoom)
 
     text_font(@font)
-    text.chars.each do |char|
+    text_input.chars.each do |char|
       char_width = text_width(char)
       method = char_method[char]
       if method
         send(method)
       elsif char.match(/[[:alpha:]]/)
-        node(char, char_width) # TODO: Will probably need some type of node as more text types are added
+        node(char, char_width) # TODO: Will probably need some type of node as more text_input types are added
       end
     end
   end
@@ -75,14 +76,14 @@ class Blueprint < Propane::App
   def key_pressed
     case key.bytes
     when [8] # backspace
-      @text.chop!
+      @text_input.chop!
     else
-      @text += key
+      @text_input += key
     end
 
     # TODO: Legend / instructions
     system "clear"
-    puts @text
+    puts @text_input
   end
 
   def mouse_pressed
@@ -133,6 +134,8 @@ class Blueprint < Propane::App
   def node(char, char_width)
     # TODO: Need to get the complete string to draw a box around it
     text_font(@font)
+    text_align(CENTER, CENTER)
+    fill 255
     text(char, -10, 40)
     translate(char_width, 0)
   end
