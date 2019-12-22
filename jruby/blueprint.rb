@@ -42,6 +42,7 @@ class Blueprint < Propane::App
     @font = create_font('Helvetica', 25)
     load_proc = ->(file) { load_shape(data_path(file)) }
     @shapes = Shapes.new(SHAPES, load_proc)
+    # For debugging
   end
 
   def draw
@@ -50,7 +51,7 @@ class Blueprint < Propane::App
     fill(0)
     # smooth
     no_stroke
-    text_align(CENTER, CENTER)
+    text_align(LEFT)
 
     if mouse_pressed?
       @center_x = mouseX - offset_x
@@ -102,9 +103,9 @@ class Blueprint < Propane::App
   end
 
   def space
-    letterWidth = 15 # TODO: Pass this
-    rect(0, -15, letterWidth + 1, 15);
-    translate(letterWidth, 0);
+    letterWidth = 15 # TODO: Pass this. Or maybe I don't need it?
+    rect(0, -15, 15 + 1, 15)
+    translate(15, 0)
   end
 
   def comma
@@ -122,21 +123,20 @@ class Blueprint < Propane::App
   def exclamationmark
     shape(shapes[:exclamationmark], 0, 0)
     translate(42, -17.4)
-    rotate(-PI/4)
+    rotate(-PI / 4)
   end
 
   def questionmark
     shape(shapes[:questionmark], 0, 0)
     translate(42, -18)
-    rotate(-PI/4)
+    rotate(-PI / 4)
   end
 
   def node(char, char_width)
     # TODO: Need to get the complete string to draw a box around it
-    text_font(@font)
-    text_align(CENTER, CENTER)
-    fill 255
-    text(char, -10, 40)
+    # When I do that I'll also want padding around it
+    # Pretty sure it's drawing from the center
+    text(char, 0, 0)
     translate(char_width, 0)
   end
 end
