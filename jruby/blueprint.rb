@@ -63,7 +63,11 @@ class Blueprint < Propane::App
     text.chars.each do |char|
       char_width = text_width(char)
       method = char_method[char]
-      send(method) if method
+      if method
+        send(method)
+      elsif char.match(/[[:alpha:]]/)
+        node(char, char_width) # TODO: Will probably need some type of node as more text types are added
+      end
     end
   end
 
@@ -124,6 +128,13 @@ class Blueprint < Propane::App
     shape(shapes[:questionmark], 0, 0)
     translate(42, -18)
     rotate(-PI/4)
+  end
+
+  def node(char, char_width)
+    # TODO: Need to get the complete string to draw a box around it
+    text_font(@font)
+    text(char, -10, 40)
+    translate(char_width, 0)
   end
 end
 
