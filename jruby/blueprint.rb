@@ -62,13 +62,13 @@ class Blueprint < Propane::App
     #scale(zoom)
 
     text_font(@font)
-    text_input.chars.each do |char|
+    text_input.chars.each_with_index do |char, index|
       char_width = text_width(char)
       method = char_method[char]
       if method
         send(method)
       elsif char.match(/[[:alpha:]]/)
-        node(char, char_width) # TODO: Will probably need some type of node as more text_input types are added
+        node(char, char_width, index) # TODO: Will probably need some type of node as more text_input types are added
       end
     end
   end
@@ -132,12 +132,29 @@ class Blueprint < Propane::App
     rotate(-PI / 4)
   end
 
-  def node(char, char_width)
+  # I need to pad this out. Either:
+  def node(char, char_width, index)
     # TODO: Need to get the complete string to draw a box around it
     # When I do that I'll also want padding around it
     # Pretty sure it's drawing from the center
+    pad_leading if is_leading_char?(index)
     text(char, 0, 0)
     translate(char_width, 0)
+  end
+
+  private
+
+  def is_leading_char?(index)
+    return if index == 0 # Need to avoid wrapping the array
+    prev_char = @text_input.chars[index - 1] # TODO: Better way to do this please
+    !prev_char.match(/[[:alpha:]]/)
+  end
+
+  def pad_leading
+    pushStyle
+    fill(255)
+    space
+    popStyle
   end
 end
 
