@@ -66,7 +66,10 @@ class Blueprint < Propane::App
       char_width = text_width(char)
       method = char_method[char]
       if method
+        pad if trailing_char?(index)
         send(method)
+      elsif char == ' '
+        space(index)
       elsif char.match(/[[:alpha:]]/)
         node(char, char_width, index) # TODO: Will probably need some type of node as more text_input types are added
       end
@@ -137,24 +140,29 @@ class Blueprint < Propane::App
     # TODO: Need to get the complete string to draw a box around it
     # When I do that I'll also want padding around it
     # Pretty sure it's drawing from the center
-    pad_leading if is_leading_char?(index)
+    pad if leading_char?(index)
     text(char, 0, 0)
     translate(char_width, 0)
   end
 
   private
 
-  def is_leading_char?(index)
+  def leading_char?(index)
     return if index == 0 # Need to avoid wrapping the array
     prev_char = @text_input.chars[index - 1] # TODO: Better way to do this please
     !prev_char.match(/[[:alpha:]]/)
   end
 
-  def pad_leading
-    pushStyle
+  def trailing_char?(index)
+    # true if perv char was ASCII
+    !leading_char?(index)
+  end
+
+  def pad
+    push_style
     fill(255)
     space
-    popStyle
+    pop_style
   end
 end
 
