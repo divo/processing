@@ -134,29 +134,30 @@ class Blueprint < Propane::App
   end
 
   def draw_string(char, char_width, index)
-    node(char, char_width, index)
-    #message(char, char_width, index)
+    #node(char, char_width, index)
+    message(char, char_width, index)
   end
 
   private
 
   def node(char, char_width, index)
+    # Draw leading / closing brace seperate to middle brace
     if leading_char?(index) # Draw opening
       rect(0, -40, 4, 60)
-      rect(0, -40, char_width + 15 + 1, 4) # TODO: const 15
-      rect(0, 20, char_width + 15 + 1, 4)
+      rect(0, -40, 15 + 1, 4) # TODO: const 15
+      rect(0, 20, 15 + 1, 4)
       pad
-      draw_char(char, char_width)
-    elsif trailing_char?(index) # Draw closing
-      rect(15 + char_width, -40, 4, 60)
-      rect(0, -40, char_width + 15 + 4, 4)
-      rect(0, 20, char_width + 15 + 4, 4)
-      draw_char(char, char_width)
+    end
+
+    rect(0, -40, char_width + 1, 4)
+    rect(0, 20, char_width + 1, 4)
+    draw_char(char, char_width)
+
+    if trailing_char?(index) # Draw closing
       pad
-    else # middle
-      rect(0, -40, char_width + 1, 4)
-      rect(0, 20, char_width + 1, 4)
-      draw_char(char, char_width)
+      rect(0, -40, 4, 60)
+      rect(0, -40, -(15 + 1), 4)
+      rect(4, 20, -(15 + 4), 4) # 4s make sense bc everythng is overlapping. Would be better to not do that
     end
   end
 
@@ -175,6 +176,7 @@ class Blueprint < Propane::App
   # True if char at previous index is non ASCII
   def leading_char?(index)
     return true if index == 0 # Need to avoid wrapping the array
+
     prev_char = @text_input.chars[index - 1] # TODO: Better way to do this please
     !prev_char.match(/[[:alpha:]]/)
   end
