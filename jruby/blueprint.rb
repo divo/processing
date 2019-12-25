@@ -66,10 +66,7 @@ class Blueprint < Propane::App
       char_width = text_width(char)
       method = char_method[char]
       if method
-        pad if trailing_char?(char, index)
         send(method)
-      elsif char == ' '
-        space(index)
       elsif char.match(/[[:alpha:]]/)
         draw_string(char, char_width, index) # TODO: Will probably need some type of node as more text_input types are added
       end
@@ -137,8 +134,8 @@ class Blueprint < Propane::App
   end
 
   def draw_string(char, char_width, index)
-    #node(char, char_width, index)
-    message(char, char_width, index)
+    node(char, char_width, index)
+    #message(char, char_width, index)
   end
 
   private
@@ -150,7 +147,7 @@ class Blueprint < Propane::App
       rect(0, 20, char_width + 15 + 1, 4)
       pad
       draw_char(char, char_width)
-    elsif trailing_char?(char, index) # Draw closing
+    elsif trailing_char?(index) # Draw closing
       rect(15 + char_width, -40, 4, 60)
       rect(0, -40, char_width + 15 + 4, 4)
       rect(0, 20, char_width + 15 + 4, 4)
@@ -167,6 +164,7 @@ class Blueprint < Propane::App
     # TODO: Need to get the complete string to draw a box around it
     pad if leading_char?(index)
     draw_char(char, char_width)
+    pad if trailing_char?(index)
   end
 
   def draw_char(char, char_width)
@@ -176,18 +174,18 @@ class Blueprint < Propane::App
 
   # True if char at previous index is non ASCII
   def leading_char?(index)
-    return if index == 0 # Need to avoid wrapping the array
+    return true if index == 0 # Need to avoid wrapping the array
     prev_char = @text_input.chars[index - 1] # TODO: Better way to do this please
     !prev_char.match(/[[:alpha:]]/)
   end
 
   # True if char is ASCII and next char is not
   # TODO: This is still bugged, I think I need proper delimiters
-  def trailing_char?(char, index)
+  def trailing_char?(index)
     next_char = @text_input.chars[index.succ]
-    return unless next_char
+    return true unless next_char
 
-    char.match(/[[:alpha:]]/) && !next_char.match(/[[:alpha:]]/)
+    !next_char.match(/[[:alpha:]]/)
   end
 
   def pad
