@@ -16,6 +16,7 @@ class Blueprint < Propane::App
   attr_accessor :text_input # TODO: Option to save this
   attr_accessor :font
   attr_accessor :shapes
+  attr_accessor :text_mode
 
   SHAPES = %i[
   space
@@ -40,6 +41,7 @@ class Blueprint < Propane::App
     @offset_x, @offset_y = 0, 0
     zoom = 1 # TODO: Scaling
     @text_input = ''
+    @text_mode = :none
   end
 
   def setup
@@ -70,6 +72,8 @@ class Blueprint < Propane::App
     text_input.chars.each_with_index do |char, index|
       char_width = text_width(char)
       method = commands[char]
+      # TODO: Refactor this to first send it to draw_string, and fall through if that's a noop
+      # How to handle closing in that case?
       if method
         send(method)
       elsif char.match(/[[:alpha:]]/)
@@ -102,10 +106,14 @@ class Blueprint < Propane::App
   def commands
     {
       ' ' => :space,
-      ',' => :comma,
-      '.' => :period,
-      '1' => :exclamationmark,
-      '2' => :questionmark
+      ',' => :down_45,
+      '.' => :up_90,
+      '1' => :up_45,
+      '2' => :questionmark,
+      '<' => :open_message,
+      '>' => :close_message,
+      '[' => :open_node,
+      ']' => :close_node
     }
   end
 
@@ -115,19 +123,19 @@ class Blueprint < Propane::App
     translate(15, 0)
   end
 
-  def comma
+  def down_45
     shape(shapes[:comma], 0, 0)
     translate(31.5, 13.5)
     rotate(PI / 4)
   end
 
-  def period
+  def up_90
     shape(shapes[:period], 0, 0)
     translate(56, -54)
     rotate(-PI / 2)
   end
 
-  def exclamationmark
+  def up_45
     shape(shapes[:exclamationmark], 0, 0)
     translate(42, -17.4)
     rotate(-PI / 4)
@@ -140,38 +148,51 @@ class Blueprint < Propane::App
   end
 
   def draw_string(char, char_width, index)
-    #node(char, char_width, index)
-    message(char, char_width, index)
+    if @text_mode == :node
+      node(char, char_width, index)
+    elsif @text_mode == :message
+      message(char, char_width, index)
+    end
+  end
+
+  def open_message
+    @text_mode = :message
+    pad
+  end
+
+  def close_message
+    pad
+    @text_mode = :none
+  end
+
+  def open_node
+    @text_mode = :node
+    rect(0, -40, 4, 60)
+    rect(0, -40, 15 + 1, 4) # TODO: const 15
+    rect(0, 20, 15 + 1, 4)
+    pad
+  end
+
+  def close_node
+    pad
+    rect(0, -40, 4, 60)
+    rect(0, -40, -(15 + 1), 4)
+    rect(4, 20, -(15 + 4), 4) # 4s make sense bc everythng is overlapping. Would be better to not do that
+    @text_mode = :none
   end
 
   private
 
+  # Must be opened and closed
   def node(char, char_width, index)
-    # Draw leading / closing brace seperate to middle brace
-    if leading_char?(index) # Draw opening
-      rect(0, -40, 4, 60)
-      rect(0, -40, 15 + 1, 4) # TODO: const 15
-      rect(0, 20, 15 + 1, 4)
-      pad
-    end
-
     rect(0, -40, char_width + 1, 4)
     rect(0, 20, char_width + 1, 4)
     draw_char(char, char_width)
-
-    if trailing_char?(index) # Draw closing
-      pad
-      rect(0, -40, 4, 60)
-      rect(0, -40, -(15 + 1), 4)
-      rect(4, 20, -(15 + 4), 4) # 4s make sense bc everythng is overlapping. Would be better to not do that
-    end
   end
 
   def message(char, char_width, index)
     # TODO: Need to get the complete string to draw a box around it
-    pad if leading_char?(index)
     draw_char(char, char_width)
-    pad if trailing_char?(index)
   end
 
   def draw_char(char, char_width)
