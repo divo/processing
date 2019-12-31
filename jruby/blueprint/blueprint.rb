@@ -1,6 +1,11 @@
 # P.3.1.2
+# TODO:
+# Clean all this into classes (although this comes last I think)
+# Add a command mode
+# Decide on commands
 require 'propane'
 require 'ruby-debug'
+require_relative 'shapes'
 
 class Blueprint < Propane::App
 
@@ -64,7 +69,7 @@ class Blueprint < Propane::App
     text_font(@font)
     text_input.chars.each_with_index do |char, index|
       char_width = text_width(char)
-      method = char_method[char]
+      method = commands[char]
       if method
         send(method)
       elsif char.match(/[[:alpha:]]/)
@@ -75,7 +80,9 @@ class Blueprint < Propane::App
 
   # TODO: Maybe a command mode?
   def key_pressed
+    return unless key.respond_to?(:bytes)
     case key.bytes
+    # when [10] # Return
     when [8] # backspace
       @text_input.chop!
     else
@@ -93,43 +100,60 @@ class Blueprint < Propane::App
   end
 
   # TODO: Come up with sensible drawing commands
-  def char_method
+  def commands
     {
-      ' ' => :space,
-      ',' => :comma,
-      '.' => :period,
-      '1' => :exclamationmark,
-      '2' => :questionmark
+      'k' => :up,
+      'j' => :down,
+      'h' => :left,
+      'l' => :right,
+      ',' => :curve_down,
+      '.' => :curve_up,
+      '<' => :open_message,
+      '>' => :close_message,
+      '[' => :open_node,
+      ']' => :close_node
     }
   end
 
-  def space
-    letterWidth = 15 # TODO: Pass this. Or maybe I don't need it?
-    rect(0, -15, 15 + 1, 15)
-    translate(15, 0)
+  def up
+    translate(0, -15)
+    block
   end
 
-  def comma
-    shape(shapes[:comma], 0, 0)
+  def down
+    translate(0, 15)
+    block
+  end
+
+  def left
+    translate(-15, 0)
+    block
+  end
+
+  def right
+    translate(15, 0)
+    block
+  end
+
+#  def space
+#    letterWidth = 15 # TODO: Pass this. Or maybe I don't need it?
+#    rect(0, -15, 15 + 1, 15)
+#    translate(15, 0)
+#  end
+
+  def block
+    rect(0, -15, 15 + 1, 15)
+  end
+
+  def curve_down
+    shape(shapes[:comma], 0, 0) # TODO: Rename asset
     translate(31.5, 13.5)
     rotate(PI / 4)
   end
 
-  def period
-    shape(shapes[:period], 0, 0)
-    translate(56, -54)
-    rotate(-PI / 2)
-  end
-
-  def exclamationmark
+  def curve_up
     shape(shapes[:exclamationmark], 0, 0)
     translate(42, -17.4)
-    rotate(-PI / 4)
-  end
-
-  def questionmark
-    shape(shapes[:questionmark], 0, 0)
-    translate(42, -18)
     rotate(-PI / 4)
   end
 
