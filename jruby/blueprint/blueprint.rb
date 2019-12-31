@@ -99,61 +99,43 @@ class Blueprint < Propane::App
     @offset_y = mouseY - @center_y
   end
 
-  # TODO: Come up with sensible drawing commands
   def commands
     {
-      'k' => :up,
-      'j' => :down,
-      'h' => :left,
-      'l' => :right,
-      ',' => :curve_down,
-      '.' => :curve_up,
-      '<' => :open_message,
-      '>' => :close_message,
-      '[' => :open_node,
-      ']' => :close_node
+      ' ' => :space,
+      ',' => :comma,
+      '.' => :period,
+      '1' => :exclamationmark,
+      '2' => :questionmark
     }
   end
 
-  def up
-    translate(0, -15)
-    block
-  end
-
-  def down
-    translate(0, 15)
-    block
-  end
-
-  def left
-    translate(-15, 0)
-    block
-  end
-
-  def right
-    translate(15, 0)
-    block
-  end
-
-#  def space
-#    letterWidth = 15 # TODO: Pass this. Or maybe I don't need it?
-#    rect(0, -15, 15 + 1, 15)
-#    translate(15, 0)
-#  end
-
-  def block
+  def space
+    letterWidth = 15 # TODO: Pass this. Or maybe I don't need it?
     rect(0, -15, 15 + 1, 15)
+    translate(15, 0)
   end
 
-  def curve_down
-    shape(shapes[:comma], 0, 0) # TODO: Rename asset
+  def comma
+    shape(shapes[:comma], 0, 0)
     translate(31.5, 13.5)
     rotate(PI / 4)
   end
 
-  def curve_up
+  def period
+    shape(shapes[:period], 0, 0)
+    translate(56, -54)
+    rotate(-PI / 2)
+  end
+
+  def exclamationmark
     shape(shapes[:exclamationmark], 0, 0)
     translate(42, -17.4)
+    rotate(-PI / 4)
+  end
+
+  def questionmark
+    shape(shapes[:questionmark], 0, 0)
+    translate(42, -18)
     rotate(-PI / 4)
   end
 
