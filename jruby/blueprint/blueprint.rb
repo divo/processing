@@ -17,6 +17,7 @@ class Blueprint < Propane::App
   attr_accessor :font
   attr_accessor :shapes
   attr_accessor :text_mode
+  attr_accessor :push_count
 
   SHAPES = %i[
   space
@@ -36,12 +37,13 @@ class Blueprint < Propane::App
   # TODO: palette
 
   def settings
-    size(800, 600)
+    size(1600, 1200)
     @center_x, @center_y = width / 2, height / 2 # TODO: Mouse clicked
     @offset_x, @offset_y = 0, 0
     zoom = 1 # TODO: Scaling
     @text_input = ''
     @text_mode = :none
+    @push_count = 0
   end
 
   def setup
@@ -80,6 +82,8 @@ class Blueprint < Propane::App
         draw_string(char, char_width, index) # TODO: Will probably need some type of node as more text_input types are added
       end
     end
+
+    pop_all
   end
 
   # TODO: Maybe a command mode?
@@ -110,10 +114,12 @@ class Blueprint < Propane::App
       '.' => :up_90,
       '1' => :up_45,
       '2' => :questionmark,
-      '<' => :open_message,
-      '>' => :close_message,
+      '(' => :open_message,
+      ')' => :close_message,
       '[' => :open_node,
-      ']' => :close_node
+      ']' => :close_node,
+      '<' => :push,
+      '>' => :pop
     }
   end
 
@@ -181,6 +187,18 @@ class Blueprint < Propane::App
     @text_mode = :none
   end
 
+  def push
+    # Can't do this every draw loop. Need these commands to exist outside the loop
+    # Or just do em once and set a flag to stop
+    push_matrix
+    @push_count = @push_count.next
+  end
+
+  def pop
+    pop_matrix
+    @push_count -= 1
+  end
+
   private
 
   # Must be opened and closed
@@ -200,21 +218,9 @@ class Blueprint < Propane::App
     translate(char_width, 0)
   end
 
-  # True if char at previous index is non ASCII
-  def leading_char?(index)
-    return true if index == 0 # Need to avoid wrapping the array
-
-    prev_char = @text_input.chars[index - 1] # TODO: Better way to do this please
-    !prev_char.match(/[[:alpha:]]/)
-  end
-
-  # True if char is ASCII and next char is not
-  # TODO: This is still bugged, I think I need proper delimiters
-  def trailing_char?(index)
-    next_char = @text_input.chars[index.succ]
-    return true unless next_char
-
-    !next_char.match(/[[:alpha:]]/)
+  def pop_all
+    @push_count.times { pop_matrix }
+    @push_count = 0
   end
 
   def pad
