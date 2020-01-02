@@ -37,13 +37,15 @@ class Blueprint < Propane::App
   # TODO: palette
 
   def settings
-    size(1600, 1200)
+    #size(1600, 1200)
+    size(600, 400)
     @center_x, @center_y = width / 2, height / 2 # TODO: Mouse clicked
     @offset_x, @offset_y = 0, 0
     zoom = 1 # TODO: Scaling
     @text_input = ''
     @text_mode = :none
     @push_count = 0
+    @text_index = 0
   end
 
   def setup
@@ -89,22 +91,41 @@ class Blueprint < Propane::App
   # TODO: Maybe a command mode?
   def key_pressed
     return unless key.respond_to?(:bytes)
-    case key.bytes
+
+    tail = @text_input[0..@text_index]
+    head = @text_input[@text_index.succ..@text_input.length]
+
     # when [10] # Return
-    when [8] # backspace
-      @text_input.chop!
+
+    if @text_mode == :none &&  movement_commands[key]
+      send(movement_commands[key])
+    elsif key.bytes == [8] # backspace
+      tail.chop!
+      left
     else
-      @text_input += key
+      tail += key
+      right
     end
+
+    @text_input = tail + (head || '')
 
     # TODO: Legend / instructions
     system "clear"
     puts @text_input
+    puts "#{' ' * @text_index}^"
+    puts "#{@text_index} #{text_input.length}"
   end
 
   def mouse_pressed
     @offset_x = mouseX - @center_x
     @offset_y = mouseY - @center_y
+  end
+
+  def movement_commands
+    {
+      'h' => :left,
+      'l' => :right
+    }
   end
 
   def commands
@@ -197,6 +218,16 @@ class Blueprint < Propane::App
   def pop
     pop_matrix
     @push_count -= 1
+  end
+
+  def left
+    return if @text_index == 0
+    @text_index -= 1 #TODO: Less indexs please
+  end
+
+  def right
+    return if @text_index == @text_input.length
+    @text_index += 1
   end
 
   private
