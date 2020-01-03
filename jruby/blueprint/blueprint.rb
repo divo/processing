@@ -127,7 +127,8 @@ class Blueprint < Propane::App
     system "clear"
     puts @text_input
     puts "#{' ' * @text_index}^"
-    puts "#{@text_index} #{text_input.length}"
+    puts ""
+    puts commands
   end
 
   def mouse_pressed
@@ -143,12 +144,16 @@ class Blueprint < Propane::App
   end
 
   def commands
+    #  Old commands
+    #  ' ' => :space
+    #  ',' => :down_45
+    #  '.' => :up_90
+    #  '1' => :up_45
+    #  '2' => :questionmark
     {
       ' ' => :space,
-      ',' => :down_45,
-      '.' => :up_90,
-      '1' => :up_45,
-      '2' => :questionmark,
+      '.' => :down_45,
+      ',' => :up_45,
       '(' => :open_message,
       ')' => :close_message,
       '[' => :open_node,
