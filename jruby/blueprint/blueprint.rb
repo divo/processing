@@ -9,7 +9,7 @@
 # Save string
 # Stations
 # Color pallete
-# Come up with commands
+# Come up with commands. V1 DONE
 # Legend
 # Print string in sketch?
 # Tidy up code and break apart
@@ -98,6 +98,10 @@ class Blueprint < Propane::App
       elsif char.match(/[[:alpha:]]/)
         draw_string(char, char_width, index) # TODO: Will probably need some type of node as more text_input types are added
       end
+
+      if index == @text_index
+        cursor
+      end
     end
 
     pop_all
@@ -123,7 +127,6 @@ class Blueprint < Propane::App
 
     @text_input = tail + (head || '')
 
-    # TODO: Legend / instructions
     system "clear"
     puts @text_input
     puts "#{' ' * @text_index}^"
@@ -235,6 +238,7 @@ class Blueprint < Propane::App
   end
 
   def pop
+    return if @push_count.zero?
     pop_matrix
     @push_count -= 1
   end
@@ -247,6 +251,13 @@ class Blueprint < Propane::App
   def right
     return if @text_index == @text_input.length
     @text_index += 1
+  end
+
+  def cursor
+    push_matrix
+    translate(0, 25)
+    draw_char('^', 0) # Char width donesn't matter at the end
+    pop_matrix
   end
 
   private
