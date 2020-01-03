@@ -3,6 +3,23 @@
 # Clean all this into classes (although this comes last I think)
 # Add a command mode
 # Decide on commands
+# TODO:
+# Current position in graph
+# Save image
+# Save string
+# Stations
+# Color pallete
+# Come up with commands
+# Legend
+# Print string in sketch?
+# Tidy up code and break apart
+# Address remaining todos
+# Arrows
+# Text alignment always up
+# Branch from nodes in different directions
+# Decision node
+# Vanity / Component node
+
 require 'propane'
 require 'ruby-debug'
 require_relative 'shapes'
@@ -37,8 +54,8 @@ class Blueprint < Propane::App
   # TODO: palette
 
   def settings
-    #size(1600, 1200)
-    size(600, 400)
+    size(1600, 1200)
+    #size(600, 400)
     @center_x, @center_y = width / 2, height / 2 # TODO: Mouse clicked
     @offset_x, @offset_y = 0, 0
     zoom = 1 # TODO: Scaling
@@ -76,8 +93,6 @@ class Blueprint < Propane::App
     text_input.chars.each_with_index do |char, index|
       char_width = text_width(char)
       method = commands[char]
-      # TODO: Refactor this to first send it to draw_string, and fall through if that's a noop
-      # How to handle closing in that case?
       if method
         send(method)
       elsif char.match(/[[:alpha:]]/)
@@ -88,7 +103,6 @@ class Blueprint < Propane::App
     pop_all
   end
 
-  # TODO: Maybe a command mode?
   def key_pressed
     return unless key.respond_to?(:bytes)
 
