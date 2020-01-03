@@ -8,14 +8,15 @@
 # Save image
 # Save string
 # Stations
-# Color pallete
+# Color pallete. Selectable. Red, black, green, blue
 # Come up with commands. V1 DONE
 # Legend
 # Print string in sketch?
 # Tidy up code and break apart
 # Address remaining todos
+# MAIN ONES:
 # Arrows
-# Text alignment always up
+# Text alignment always up. Unable to get current matrix. Will have to track this manually
 # Branch from nodes in different directions
 # Decision node
 # Vanity / Component node
