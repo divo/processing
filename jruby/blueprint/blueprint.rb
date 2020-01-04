@@ -30,6 +30,7 @@ require_relative 'drawing'
 require_relative 'commands'
 require_relative 'input'
 require_relative 'options'
+require_relative 'io'
 
 module Blueprint
   class Diagram < Propane::App
@@ -37,6 +38,7 @@ module Blueprint
     include Blueprint::Drawing
     include Blueprint::Commands
     include Blueprint::Input
+    include Blueprint::IO
 
     # TODO: WTF exaclty do these accessors do
     attr_accessor :center_x, :center_y
@@ -75,12 +77,14 @@ module Blueprint
       @text_mode = :none
       @push_count = 0
       @text_index = 0
+      puts $options
     end
 
     def setup
       sketch_title 'Blueprint'
       @font = create_font('Helvetica', 25)
       @shapes = load_shapes(SHAPES)
+      read_file
     end
 
     def draw

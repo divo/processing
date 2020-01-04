@@ -21,7 +21,7 @@ module Blueprint
         $options[:stream] = true
       end
 
-      opts.on('-img', '--image FILE', 'Output png to file') do |file|
+      opts.on('--image FILE', 'Output png to file') do |file|
         $options[:image] = file
       end
     end.parse!
