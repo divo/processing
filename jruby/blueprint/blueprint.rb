@@ -5,9 +5,9 @@
 # Decide on commands
 # TODO:
 # Current position in graph
-# Save image
-# Save string, stream it out to a file
-# Read stirng
+# DONE. Save image. TODO: As a command instead of every frame?
+# DONE. Save string, stream it out to a file
+# DONE. Read stirng
 # Stations
 # Color pallete. Selectable. Red, black, green, blue
 # Come up with commands. V1 DONE
@@ -126,7 +126,7 @@ module Blueprint
 
       pop_all
       write_file
-      save_image #TODO: Dont save the cursor
+      save_image #TODO: Dont save the cursor. Also may want to make this a command...
     end
 
     def key_pressed

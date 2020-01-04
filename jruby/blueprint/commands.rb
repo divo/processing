@@ -25,7 +25,8 @@ module Blueprint
         '<' => :push,
         '>' => :pop,
         '/' => :arrow_forward, # TODO: Maybe use the push / pop stuff for this?
-        '\\' => :arrow_backward
+        '\\' => :arrow_backward,
+        ':' => :state
       }
     end
   end

@@ -110,6 +110,15 @@ module Blueprint
       translate(15, 0)
     end
 
+    def state
+      fill(0)
+      ellipse(-5, -7, 33, 33)
+      fill(255)
+      ellipse(-5, -7, 25, 25)
+
+      fill(0)
+    end
+
     private
 
     # Must be opened and closed
