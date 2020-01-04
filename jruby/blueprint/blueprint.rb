@@ -55,7 +55,7 @@ class Blueprint < Propane::App
   # TODO: palette
 
   def settings
-    size(1600, 1200)
+    size(400, 300)
     #size(600, 400)
     @center_x, @center_y = width / 2, height / 2 # TODO: Mouse clicked
     @offset_x, @offset_y = 0, 0
@@ -163,7 +163,9 @@ class Blueprint < Propane::App
       '[' => :open_node,
       ']' => :close_node,
       '<' => :push,
-      '>' => :pop
+      '>' => :pop,
+      '/' => :arrow_forward, # TODO: Maybe use the push / pop stuff for this?
+      '\\' => :arrow_backward
     }
   end
 
@@ -259,6 +261,22 @@ class Blueprint < Propane::App
     translate(0, 25)
     draw_char('^', 0) # Char width donesn't matter at the end
     pop_matrix
+  end
+
+  def arrow_forward
+    push_matrix
+    translate(0, -7.5)
+    triangle(0, 15, 15, 0, 0, -15)
+    pop_matrix
+    translate(15, 0)
+  end
+
+  def arrow_backward
+    push_matrix
+    translate(0, -7.5)
+    triangle(15, 15, 0, 0, 15, -15)
+    pop_matrix
+    translate(15, 0)
   end
 
   private
