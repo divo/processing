@@ -95,6 +95,11 @@ module Blueprint
       no_stroke
       text_align(LEFT)
 
+      if $options[:stream]
+        # TODO: This should probably ignore all key input
+        read_file
+      end
+
       if mouse_pressed?
         @center_x = mouseX - offset_x
         @center_y = mouseY - offset_y
@@ -113,6 +118,7 @@ module Blueprint
           draw_string(char, char_width, index) # TODO: Will probably need some type of node as more text_input types are added
         end
 
+
         if index == @text_index
           cursor
         end
@@ -120,6 +126,7 @@ module Blueprint
 
       pop_all
       write_file
+      save_image #TODO: Dont save the cursor
     end
 
     def key_pressed

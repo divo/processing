@@ -21,7 +21,8 @@ module Blueprint
     end
 
     def save_image
-
+      filename = $options[:image]
+      save(filename)
     end
   end
 end
