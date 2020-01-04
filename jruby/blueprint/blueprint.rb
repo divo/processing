@@ -15,17 +15,21 @@
 # Tidy up code and break apart
 # Address remaining todos
 # MAIN ONES:
-# Arrows
+# DONE. Arrows
 # Text alignment always up. Unable to get current matrix. Will have to track this manually
 # Branch from nodes in different directions
 # Decision node
 # Vanity / Component node
+
+
+# Clean this thing up. What are the main components?
 
 require 'propane'
 require 'ruby-debug'
 require_relative 'shapes'
 
 class Blueprint < Propane::App
+  include Shapes
 
   # TODO: WTF exaclty do these accessors do
   attr_accessor :center_x, :center_y
@@ -69,8 +73,7 @@ class Blueprint < Propane::App
   def setup
     sketch_title 'Blueprint'
     @font = create_font('Helvetica', 25)
-    load_proc = ->(file) { load_shape(data_path(file)) }
-    @shapes = Shapes.new(SHAPES, load_proc)
+    @shapes = load_shapes(SHAPES)
     # For debugging
   end
 
