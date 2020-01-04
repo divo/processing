@@ -14,7 +14,10 @@ module Blueprint
     end
 
     def write_file
-
+      filename = $options[:output]
+      if filename
+        File.write(filename, @text_input)
+      end
     end
 
     def save_image

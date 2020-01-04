@@ -76,7 +76,6 @@ module Blueprint
       @text_input = ''
       @text_mode = :none
       @push_count = 0
-      @text_index = 0
       puts $options
     end
 
@@ -85,6 +84,7 @@ module Blueprint
       @font = create_font('Helvetica', 25)
       @shapes = load_shapes(SHAPES)
       read_file
+      @text_index = @text_input.length - 1
     end
 
     def draw
@@ -119,6 +119,7 @@ module Blueprint
       end
 
       pop_all
+      write_file
     end
 
     def key_pressed
