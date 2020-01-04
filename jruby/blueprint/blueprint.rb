@@ -22,6 +22,7 @@
 # Decision node
 # Vanity / Component node
 # Draw ? and other chars
+# Into gem
 
 require 'propane'
 require 'ruby-debug'
@@ -114,7 +115,7 @@ module Blueprint
         method = commands[char]
         if method
           send(method)
-        elsif char.match(/[[:alpha:]]/)
+        elsif # char.match(/[[:alpha:]]/)
           draw_string(char, char_width, index) # TODO: Will probably need some type of node as more text_input types are added
         end
 
