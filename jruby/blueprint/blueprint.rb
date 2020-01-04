@@ -6,7 +6,8 @@
 # TODO:
 # Current position in graph
 # Save image
-# Save string
+# Save string, stream it out to a file
+# Read stirng
 # Stations
 # Color pallete. Selectable. Red, black, green, blue
 # Come up with commands. V1 DONE
@@ -20,6 +21,7 @@
 # Branch from nodes in different directions
 # Decision node
 # Vanity / Component node
+# Draw ? and other chars
 
 require 'propane'
 require 'ruby-debug'
@@ -27,6 +29,7 @@ require_relative 'shapes'
 require_relative 'drawing'
 require_relative 'commands'
 require_relative 'input'
+require_relative 'options'
 
 module Blueprint
   class Diagram < Propane::App
@@ -63,7 +66,7 @@ module Blueprint
     # TODO: palette
 
     def settings
-      size(400, 300)
+      size(1400, 1200)
       #size(600, 400)
       @center_x, @center_y = width / 2, height / 2 # TODO: Mouse clicked
       @offset_x, @offset_y = 0, 0
