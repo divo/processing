@@ -26,12 +26,14 @@ require 'ruby-debug'
 require_relative 'shapes'
 require_relative 'drawing'
 require_relative 'commands'
+require_relative 'input'
 
 module Blueprint
   class Diagram < Propane::App
     include Blueprint::Shapes
     include Blueprint::Drawing
     include Blueprint::Commands
+    include Blueprint::Input
 
     # TODO: WTF exaclty do these accessors do
     attr_accessor :center_x, :center_y
@@ -115,28 +117,8 @@ module Blueprint
     def key_pressed
       return unless key.respond_to?(:bytes)
 
-      tail = @text_input[0..@text_index]
-      head = @text_input[@text_index.succ..@text_input.length]
-
-      # when [10] # Return
-
-      if @text_mode == :none &&  movement_commands[key]
-        send(movement_commands[key])
-      elsif key.bytes == [8] # backspace
-        tail.chop!
-        left
-      else
-        tail += key
-        right
-      end
-
-      @text_input = tail + (head || '')
-
-      system "clear"
-      puts @text_input
-      puts "#{' ' * @text_index}^"
-      puts ""
-      puts commands
+      handle(key)
+      print_buffer
     end
 
     def mouse_pressed
@@ -147,5 +129,4 @@ module Blueprint
 end
 
 Blueprint::Diagram.new
-
 
