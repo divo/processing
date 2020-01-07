@@ -1,5 +1,5 @@
 module Blueprint
-  module Input
+  module Text
     def print_buffer
       system "clear"
       puts @text_input

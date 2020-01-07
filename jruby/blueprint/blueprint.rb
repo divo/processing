@@ -6,6 +6,7 @@
 # TODO:
 # Current position in graph
 # DONE. Save image. TODO: As a command instead of every frame?
+# Need to save entire canvas. Might be a fundamental issue here....
 # DONE. Save string, stream it out to a file
 # DONE. Read stirng
 # Stations
@@ -29,7 +30,7 @@ require 'ruby-debug'
 require_relative 'shapes'
 require_relative 'drawing'
 require_relative 'commands'
-require_relative 'input'
+require_relative 'text'
 require_relative 'options'
 require_relative 'io'
 
@@ -38,7 +39,7 @@ module Blueprint
     include Blueprint::Shapes
     include Blueprint::Drawing
     include Blueprint::Commands
-    include Blueprint::Input
+    include Blueprint::Text
     include Blueprint::IO
 
     # TODO: WTF exaclty do these accessors do
