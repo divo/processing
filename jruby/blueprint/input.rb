@@ -20,9 +20,11 @@ module Blueprint
       elsif key.bytes == [8] # backspace
         tail.chop!
         left
+        save_next_frame
       else
         tail += key
         right
+        save_next_frame
       end
 
       @text_input = tail + (head || '')

@@ -50,6 +50,7 @@ module Blueprint
     attr_accessor :shapes
     attr_accessor :text_mode
     attr_accessor :push_count
+    attr_accessor :save_frame # Set after new input, next frame drawn is saved
 
     SHAPES = %i[
     space
@@ -77,7 +78,7 @@ module Blueprint
       @text_input = ''
       @text_mode = :none
       @push_count = 0
-      puts $options
+      @save_frame = false
     end
 
     def setup
@@ -125,9 +126,12 @@ module Blueprint
         end
       end
 
+      # This is maybe a little weak? Better to set a flag and then run a method?
+      if @save_frame
+        save_frame
+      end
+
       pop_all
-      write_file
-      save_image #TODO: Dont save the cursor. Also may want to make this a command...
     end
 
     def key_pressed
@@ -140,6 +144,16 @@ module Blueprint
     def mouse_pressed
       @offset_x = mouseX - @center_x
       @offset_y = mouseY - @center_y
+    end
+
+    def save_frame
+      write_file
+      save_image #TODO: Dont save the cursor. Also may want to make this a command...
+      @save_frame = false
+    end
+
+    def save_next_frame
+      @save_frame = true
     end
   end
 end
