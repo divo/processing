@@ -9,7 +9,7 @@
 # Need to save entire canvas. Might be a fundamental issue here....
 # DONE. Save string, stream it out to a file
 # DONE. Read stirng
-# Stations
+# DONE. Stations
 # Color pallete. Selectable. Red, black, green, blue
 # Come up with commands. V1 DONE
 # Legend
@@ -24,6 +24,7 @@
 # Vanity / Component node
 # Draw ? and other chars
 # Into gem
+# Save entire canvas
 
 require 'propane'
 require 'ruby-debug'
@@ -91,6 +92,10 @@ module Blueprint
     end
 
     def draw
+      render
+    end
+
+    def render
       # TODO: scaling and translation are kinda key to this
       background(255)
       fill(0)
@@ -127,11 +132,6 @@ module Blueprint
         end
       end
 
-      # This is maybe a little weak? Better to set a flag and then run a method?
-      if @save_frame
-        save_frame
-      end
-
       pop_all
     end
 
@@ -150,11 +150,6 @@ module Blueprint
     def save_frame
       write_file
       save_image #TODO: Dont save the cursor. Also may want to make this a command...
-      @save_frame = false
-    end
-
-    def save_next_frame
-      @save_frame = true
     end
   end
 end
