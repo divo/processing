@@ -10,6 +10,7 @@ module Blueprint
       $options[:image] = 'output.png'
 
       opts.on('-i', '--input FILE', 'Read input file') do |file|
+        # TODO: None of this block shit is needed. RTFM
         $options[:input] = file
       end
 
