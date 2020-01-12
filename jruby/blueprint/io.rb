@@ -25,7 +25,8 @@ module Blueprint
     def save_image
       filename = $options[:image]
       # TODO: Make the size correct
-      context = create_graphics(1000, 1000)
+      render # Need to render once to compute the size. There is probably a way to avoid this
+      context = create_graphics(output_width, output_height)
       begin_record(context)
       render
       end_record

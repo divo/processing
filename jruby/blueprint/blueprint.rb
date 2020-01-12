@@ -34,6 +34,7 @@ require_relative 'commands'
 require_relative 'text'
 require_relative 'options'
 require_relative 'io'
+require_relative 'translate'
 
 module Blueprint
   class Diagram < Propane::App
@@ -42,8 +43,10 @@ module Blueprint
     include Blueprint::Commands
     include Blueprint::Text
     include Blueprint::IO
+    include Blueprint::Translate
 
     # TODO: WTF exaclty do these accessors do
+    # TODO: Move accessors from modules to modules, and build easy initalizer
     attr_accessor :center_x, :center_y
     attr_accessor :offset_x, :offset_y
     attr_accessor :zoom
@@ -52,7 +55,7 @@ module Blueprint
     attr_accessor :shapes
     attr_accessor :text_mode
     attr_accessor :push_count
-    attr_accessor :save_frame # Set after new input, next frame drawn is saved
+    attr_accessor :current_x, :current_y
 
     SHAPES = %i[
     space
@@ -72,15 +75,14 @@ module Blueprint
     # TODO: palette
 
     def settings
-      size(1400, 1200)
-      #size(600, 400)
+      #size(1400, 1200)
+      size(600, 400)
       @center_x, @center_y = width / 2, height / 2 # TODO: Mouse clicked
       @offset_x, @offset_y = 0, 0
       zoom = 1 # TODO: Scaling
       @text_input = ''
       @text_mode = :none
       @push_count = 0
-      @save_frame = false
     end
 
     def setup
@@ -96,6 +98,8 @@ module Blueprint
     end
 
     def render
+      reset_transform_tracking
+      reset_matrix
       # TODO: scaling and translation are kinda key to this
       background(255)
       fill(0)

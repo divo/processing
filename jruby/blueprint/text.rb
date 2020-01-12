@@ -6,6 +6,7 @@ module Blueprint
       puts "#{' ' * @text_index}^"
       puts ""
       puts commands
+      puts current_x
     end
 
     # TODO: This is a bit shit, please tidy
