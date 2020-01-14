@@ -38,6 +38,8 @@ require_relative 'translate'
 
 module Blueprint
   class Diagram < Propane::App
+    load_library 'svg'
+    include_package 'processing.svg'
     include Blueprint::Shapes
     include Blueprint::Drawing
     include Blueprint::Commands
@@ -75,8 +77,11 @@ module Blueprint
     # TODO: palette
 
     def settings
-      #size(1400, 1200)
-      size(600, 400)
+      if $options[:svg]
+        size($options[:svg_width], $options[:svg_height], SVG, "#{$options[:svg]}.svg")
+      else
+        size(1200, 800)
+      end
       @center_x, @center_y = width / 2, height / 2 # TODO: Mouse clicked
       @offset_x, @offset_y = 0, 0
       zoom = 1 # TODO: Scaling
@@ -153,7 +158,7 @@ module Blueprint
 
     def save_frame
       write_file
-      save_image #TODO: Dont save the cursor. Also may want to make this a command...
+      #save_image #TODO: Dont save the cursor. Also may want to make this a command...
     end
   end
 end
