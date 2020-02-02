@@ -18,15 +18,20 @@ module Blueprint
         ' ' => :space,
         '.' => :down_45,
         ',' => :up_45,
-        '(' => :open_message,
-        ')' => :close_message,
-        '[' => :open_node,
-        ']' => :close_node,
         '<' => :push,
         '>' => :pop,
         '/' => :arrow_forward, # TODO: Maybe use the push / pop stuff for this?
         '\\' => :arrow_backward,
         ':' => :state
+      }.merge(node_commands)
+    end
+
+    def node_commands
+      {
+        '(' => :open_message,
+        ')' => :close_message,
+        '[' => :open_node,
+        ']' => :close_node,
       }
     end
   end

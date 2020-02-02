@@ -39,12 +39,20 @@ module Blueprint
     end
 
     def open_message
-      @text_mode = :message
+      set_open_message
       pad
+    end
+
+    def set_open_message
+      @text_mode = :message
     end
 
     def close_message
       pad
+      set_close_message
+    end
+
+    def set_close_message
       @text_mode = :none
     end
 
@@ -56,11 +64,19 @@ module Blueprint
       pad
     end
 
+    def set_open_node
+      @text_mode = :node
+    end
+
     def close_node
       pad
       rect(0, -40, 4, 60)
       rect(0, -40, -(15 + 1), 4)
       rect(4, 20, -(15 + 4), 4) # 4s make sense bc everythng is overlapping. Would be better to not do that
+      set_close_node
+    end
+
+    def set_close_node
       @text_mode = :none
     end
 
@@ -80,11 +96,13 @@ module Blueprint
     def left
       return if @text_index == 0
       @text_index -= 1 #TODO: Less indexs please
+      update_mode
     end
 
     def right
       return if @text_index == @text_input.length
       @text_index += 1
+      update_mode
     end
 
     def cursor
@@ -145,6 +163,11 @@ module Blueprint
 
     def pad
       translate(15, 0)
+    end
+
+    def update_mode
+      command = node_commands[@text_input[@text_index]]
+      send("set_#{command}") if command
     end
   end
 end
