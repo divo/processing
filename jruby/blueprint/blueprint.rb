@@ -20,6 +20,8 @@
 # DONE. Arrows
 # Text alignment always up. Unable to get current matrix. Will have to track this manually
 # Branch from nodes in different directions
+  # Maybe I don't want this? It could make shit really unclear really quick. Have a look at other subway maps to see if they allow this.
+  # Pretty sure they do not. Maybe do out some complicated-ish decision graphs and see how it looks.
 # Decision node
 # Vanity / Component node
 # Draw ? and other chars
