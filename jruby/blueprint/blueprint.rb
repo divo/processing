@@ -27,6 +27,7 @@
 # Draw ? and other chars
 # Into gem
 # Save entire canvas
+# There are still annoying bugs around text and draw modes. That might need a rethink
 
 require 'propane'
 require 'ruby-debug'
