@@ -28,6 +28,10 @@
 # Into gem
 # Save entire canvas
 # There are still annoying bugs around text and draw modes. That might need a rethink
+# Isometric mode
+# Multiple lines
+# "Play" through a line
+# This should be in the web
 
 require 'propane'
 require 'ruby-debug'
